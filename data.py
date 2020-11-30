@@ -1,14 +1,9 @@
-
-
 # importing modules & libs
 import mysql.connector
 import colorama
 import sys
 import os
 import time
-
-# Functions
-
 
 # Login
 user = input("Enter user => ")
@@ -44,5 +39,53 @@ except mysql.connector.errors.ProgrammingError:
     time.sleep(4)
     exit
 
+# Functions
+
+def createDB():
+    newDB = input("Enter new DB name => ")
+    cursor.execute("CREATE DATABASE {}".format(newDB))
+    print(cursor.fetchall())
+    print("\033[32;1mDATABASE : {} created successfully :)\033[0m ")
+
+def useDB():
+    cursor.execute("SHOW DATABASES")
+    databases = cursor.fetchall()
+    print(databases)
+
+    wantedDB = input("Enter database name => ")
+    cursor.execute("USE {}".format(wantedDB))
+    print(cursor.fetchall())
+
+def newtable():
+
+    newtablename = input("Enter new table name => ")
+    fieldcount = int(input("Number of fields desired? => "))
+    tablestructure = {}
+    fieldaddedcount = 0
+
+    # Get table structure info
+    for i in range(fieldcount):
+        field = input("Field name => ")
+        parameter = input("Enter parameters for {} :".format(field))
+        fieldstructure[field] = parameter
+
+    # Make table
+    fields = tablestructure.keys()
+    tablestring = """"""
+    tablestring += "CREATE TABLE {} (\n".format(newtablename)
+    for field in fields:
+        if fieldaddedcount < len(fields)-1:
+            tablestring += "{} {},\n".format(field,tablestructure[field])
+
+        else:
+            tablestring += "{} {})".format(field, tablestructure[field])
+        fieldaddedcount += 1
+    
+    # execute
+    cursor.execute(tablestring)
+    print(cursor.fetchall())
+
+
 while running:
+    
     break
