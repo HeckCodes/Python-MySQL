@@ -19,7 +19,7 @@ try:
         print("Checking for user : \033[1m <{}>\033[0m".format(user))
         print("Injecting password : \033[32;1m <{}>\033[0m".format("*"*len(password)))
         print("--------------------------------")
-        print("Successfully connected to DB ;) ")
+        print("\033[32;22mSuccessfully connected to DB ;) \033[0m")
         run = input("Start DB console (Y/N)? => ")
 
         if run == "Y":
@@ -43,9 +43,14 @@ except mysql.connector.errors.ProgrammingError:
 
 def createDB():
     newDB = input("Enter new DB name => ")
+    string = "CREATING DATABASE {}...\n".format(newDB)
+    for char in string:
+        time.sleep(0.1)
+        print(char,end="")
     cursor.execute("CREATE DATABASE {}".format(newDB))
     print(cursor.fetchall())
     print("\033[32;1mDATABASE : {} created successfully :)\033[0m ")
+    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
 def useDB():
     cursor.execute("SHOW DATABASES")
@@ -55,8 +60,18 @@ def useDB():
     wantedDB = input("Enter database name => ")
     cursor.execute("USE {}".format(wantedDB))
     print(cursor.fetchall())
+    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
 def newtable():
+
+    wanttable = input("Want to show all tables (Y/N)? => ")
+    if wanttable=="Y":
+        string = "GETTING ALL TABLES...\n"
+        for char in string:
+            time.sleep(0.1)
+            print(char,end="")
+        cursor.execute("SHOW TABLES")
+        print(cursor.fetchall())
 
     newtablename = input("Enter new table name => ")
     fieldcount = int(input("Number of fields desired? => "))
@@ -82,10 +97,34 @@ def newtable():
         fieldaddedcount += 1
     
     # execute
+    for char in (tablestring + "\n"):
+        time.sleep(0.08)
+        print(char,end="")
     cursor.execute(tablestring)
     print(cursor.fetchall())
+    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+
+
+def customcmd():
+    cmd = input("Your query => ")
+    for char in cmd + "\n":
+        time.sleep(0.1)
+        print(char,end="")
+    cursor.execute(cmd)
+    print(cursor.fetchall())
+    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
 
 while running:
     
+    opt ="""
+    1. Create Database
+    2. Use Database
+    3. Create Table
+    4. Custom Query
+    5. Exit Console
+    """
+    print(opt)
+
+
     break
