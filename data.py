@@ -115,6 +115,7 @@ def customcmd():
     print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
 
+# Main loop for console
 while running:
     
     opt ="""
