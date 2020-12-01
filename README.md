@@ -1,5 +1,10 @@
-# InsidesVoice
+# Python Console For MySQL
 
-For data analysis using matplotlib and MySQL with python.
+Use this python code for running MySQL queries like:
 
+  Creating Database
+  Creating, deleting, modifying and updating tables
+  Searching for records in tables
+  And much more..
+  
 Made by HeckCodes
