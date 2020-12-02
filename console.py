@@ -37,18 +37,33 @@ except mysql.connector.errors.ProgrammingError:
     running = False
     print("\033[91mPlease check user and password :/\033[0m")
     time.sleep(4)
+    os.system("python console.py")
+    print("Restarting")
     exit
 
 # Functions
 
 def createDB():
-    newDB = input("Enter new DB name => ")
-    string = "CREATING DATABASE {}...\n".format(newDB)
-    for char in string:
-        time.sleep(0.1)
-        print(char,end="")
-    cursor.execute("CREATE DATABASE {}".format(newDB))
-    print(cursor.fetchall())
+
+    cursor.execute("SHOW DATABASES")
+    databases = cursor.fetchall()
+    print(databases)
+
+    try:
+        newDB = input("Enter new DB name => ")
+        string = "CREATING DATABASE {}...\n".format(newDB)
+        for char in string:
+            time.sleep(0.1)
+            print(char,end="")
+
+        cursor.execute("CREATE DATABASE {}".format(newDB))
+        print(cursor.fetchall())
+
+    except mysql.connector.errors.DatabaseError:
+        print("Database name already exists")
+        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        createDB()
+
     print("\033[32;1mDATABASE : {} created successfully :)\033[0m ")
     print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
@@ -59,7 +74,6 @@ def useDB():
 
     wantedDB = input("Enter database name => ")
     cursor.execute("USE {}".format(wantedDB))
-    print(cursor.fetchall())
     print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
 def newtable():
@@ -100,16 +114,19 @@ def newtable():
     for char in (tablestring + "\n"):
         time.sleep(0.08)
         print(char,end="")
+
     cursor.execute(tablestring)
     print(cursor.fetchall())
     print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
 
 def customcmd():
+
     cmd = input("Your query => ")
     for char in cmd + "\n":
         time.sleep(0.1)
         print(char,end="")
+        
     cursor.execute(cmd)
     print(cursor.fetchall())
     print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
@@ -124,8 +141,31 @@ while running:
     3. Create Table
     4. Custom Query
     5. Exit Console
-    """
-    print(opt)
+    Your choice => """
+    pref = int(input(opt))
+
+    if type(pref) == int:
+
+        if pref == 1:
+            createDB()
+
+        elif pref == 2:
+            useDB()
+
+        elif pref == 3:
+            newtable()
+
+        elif pref == 4:
+            customcmd()
+
+        elif pref == 5:
+            string = "EXITING CONSOLE...\n"
+            for char in string:
+                time.sleep(0.1)
+                print(char,end="")
+            break
 
 
-    break
+    else:
+        print("\033[91mPlease enter an integral value :/\003[0m")
+        continue
